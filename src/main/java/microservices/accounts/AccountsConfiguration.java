@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.logging.Logger;
 
-import javax.activation.DataSource;
+import javax.sql.DataSource;
 
 import org.springframework.boot.orm.jpa.EntityScan;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +17,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 
+/**
+ * Configures datasourse for "T_ACCOUNT" table
+ */
 @Configuration
 @ComponentScan
 @EntityScan("microservices.accounts")
@@ -31,8 +34,7 @@ public class AccountsConfiguration {
 	}
 
 	/**
-	 * Creates an in-memory "rewards" database populated with test data for fast
-	 * testing
+	 * Creates an in-memory database
 	 */
 	@Bean
 	public DataSource dataSource() {
@@ -40,13 +42,13 @@ public class AccountsConfiguration {
 
 		// Create an in-memory H2 relational database containing some demo
 		// accounts.
-		DataSource dataSource = (DataSource) (new EmbeddedDatabaseBuilder()).addScript("classpath:testdb/schema.sql")
+		DataSource dataSource = (new EmbeddedDatabaseBuilder()).addScript("classpath:testdb/schema.sql")
 				.addScript("classpath:testdb/data.sql").build();
 
 		logger.info("dataSource = " + dataSource);
 
 		// Sanity check
-		JdbcTemplate jdbcTemplate = new JdbcTemplate((javax.sql.DataSource) dataSource);
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		List<Map<String, Object>> accounts = jdbcTemplate.queryForList("SELECT number FROM T_ACCOUNT");
 		logger.info("System has " + accounts.size() + " accounts");
 
