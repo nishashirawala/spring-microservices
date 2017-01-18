@@ -3,14 +3,14 @@ package microservices.accounts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Import;
 
 /**
  * Run as a micro-service, registering with the Discovery Server (Eureka).
  */
 @EnableAutoConfiguration
-@EnableDiscoveryClient
+@EnableEurekaClient
 @Import(AccountsConfiguration.class)
 public class AccountsServer {
 
